@@ -1,3 +1,4 @@
+import React, { FunctionComponent } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 
@@ -6,10 +7,10 @@ interface PokemonProps {
   pokemonSprites: string;
 }
 
-export const getServerSideProps: GetServerSideProps<PokemonProps> = async ({
-  params,
-}) => {
-  const pokemon = params?.id;
+export const getServerSideProps: GetServerSideProps<PokemonProps> = async (
+  context
+) => {
+  const pokemon = context.params?.id;
   const pokemonReq = await fetch(
     `https://pokeapi.co/api/v2/pokemon/${pokemon}`
   );
@@ -27,7 +28,7 @@ export const getServerSideProps: GetServerSideProps<PokemonProps> = async ({
   };
 };
 
-export default function Pokemon({ pokemonData, pokemonSprites }) {
+export default function Pokemon({ pokemonData, pokemonSprites }: PokemonProps) {
   return (
     <div>
       {pokemonData.name}
