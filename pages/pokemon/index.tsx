@@ -1,16 +1,38 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Container, Header, Divider, Button, Input } from "semantic-ui-react";
+import {
+  Container,
+  Header,
+  Divider,
+  Input,
+  Message,
+  Dimmer,
+  Loader,
+  Segment,
+} from "semantic-ui-react";
+import useSWRImmutable from "swr/immutable";
+import { fetcher } from "../../helpers/pages";
+import PokemonPreview from "../../components/Preview";
 
 export default function PokemonSearch() {
   const router = useRouter();
+
   const { search } = router.query;
   const searchQuery = (Array.isArray(search) ? search[0] : search) ?? "";
 
   const defaultSearchValue = searchQuery;
 
   const [searchValue, setSearchValue] = useState(defaultSearchValue);
+
+  const { data, error, isLoading, mutate } = useSWRImmutable(
+    searchValue ? `/api/search/${searchValue}` : null,
+    fetcher,
+    {
+      keepPreviousData: true,
+      shouldRetryOnError: false,
+    }
+  );
 
   useEffect(() => {
     if (defaultSearchValue) {
@@ -20,13 +42,11 @@ export default function PokemonSearch() {
 
   const onSearch = () => {
     if (searchValue) {
-      router.push({
-        pathname: "/pokemon/[id]",
-        query: { id: searchValue },
-      });
+      mutate();
     }
   };
 
+  // TODO: Add debounce for input
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
@@ -50,23 +70,23 @@ export default function PokemonSearch() {
         defaultValue={defaultSearchValue}
       />
       <Divider />
-      {searchQuery && (
-        <>
-          <Header as="h2">{`Results for ${searchQuery}`}</Header>
-          <ul>
-            <li>
-              <Link
-                href={{
-                  pathname: "/pokemon/[id]",
-                  query: { id: searchQuery },
-                }}
-              >
-                {`Go to the details of ${searchQuery}`}
-              </Link>
-            </li>
-          </ul>
-        </>
-      )}
+      <Segment>
+        <Dimmer active={isLoading}>
+          <Loader size="large">Loading</Loader>
+        </Dimmer>
+        {error ? (
+          <Message
+            error
+            header={`No pokemon was found for input: ${searchValue}`}
+            content="Please try again with a valid id or name"
+          />
+        ) : (
+          <>
+            <Header as="h2">{`Results`}</Header>
+            <PokemonPreview data={data} />
+          </>
+        )}
+      </Segment>
     </Container>
   );
 }
