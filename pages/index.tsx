@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import { Button, Container, Divider, Header } from "semantic-ui-react";
 import { useRouter } from "next/router";
 

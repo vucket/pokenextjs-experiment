@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { PokemonBaseData } from "../../model/pokemon";
 import { Container, Header, Divider, List, Grid } from "semantic-ui-react";
+import { POKE_API_HOST, POKE_API_PATH_POKEMON } from "../../constants";
 
 interface PokemonProps {
   data: PokemonBaseData;
@@ -13,7 +14,7 @@ export const getServerSideProps: GetServerSideProps<PokemonProps> = async (
 ) => {
   const pokemon = context.params?.id;
   const pokemonReq = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${pokemon}`
+    `${POKE_API_HOST}${POKE_API_PATH_POKEMON}${pokemon}`
   );
   const data: PokemonBaseData = await pokemonReq.json();
 
