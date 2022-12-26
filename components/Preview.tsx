@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Header } from "semantic-ui-react";
+import { Card } from "semantic-ui-react";
 import { PokemonBaseData } from "../model/pokemon";
 
 interface PreviewProps {
@@ -7,21 +7,16 @@ interface PreviewProps {
 }
 
 export default function PokemonPreview({ data }: PreviewProps) {
+  const pokemonName = data.name.toUpperCase();
   return (
     <>
-      <Header as="h3">{data.name.toUpperCase()}</Header>
-      <ul>
-        <li>
-          <Link
-            href={{
-              pathname: "/pokemon/[id]",
-              query: { id: data.id },
-            }}
-          >
-            {`Go to the details of ${data.name}`}
-          </Link>
-        </li>
-      </ul>
+      <Card
+        image={data.sprites.front_default}
+        header={pokemonName}
+        meta={`ID: ${data.id}`}
+        description={`Weight: ${data.weight} - Height: ${data.height}`}
+        href={`/pokemon/${data.id}`}
+      />
     </>
   );
 }

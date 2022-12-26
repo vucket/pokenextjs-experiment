@@ -21,9 +21,7 @@ export default function PokemonSearch() {
   const { search } = router.query;
   const searchQuery = (Array.isArray(search) ? search[0] : search) ?? "";
 
-  const defaultSearchValue = searchQuery;
-
-  const [searchValue, setSearchValue] = useState(defaultSearchValue);
+  const [searchValue, setSearchValue] = useState(searchQuery);
 
   const { data, error, isLoading, mutate } = useSWRImmutable(
     searchValue ? `/api/search/${searchValue}` : null,
@@ -35,10 +33,10 @@ export default function PokemonSearch() {
   );
 
   useEffect(() => {
-    if (defaultSearchValue) {
-      setSearchValue(defaultSearchValue);
+    if (searchQuery) {
+      setSearchValue(searchQuery);
     }
-  }, [defaultSearchValue]);
+  }, [searchQuery]);
 
   const onSearch = () => {
     if (searchValue) {
@@ -48,7 +46,7 @@ export default function PokemonSearch() {
 
   // TODO: Add debounce for input
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
+    setSearchValue(event.target.value.trim());
   };
 
   return (
@@ -67,26 +65,29 @@ export default function PokemonSearch() {
           onClick: onSearch,
         }}
         onChange={onInputChange}
-        defaultValue={defaultSearchValue}
+        value={searchValue}
       />
       <Divider />
-      <Segment>
-        <Dimmer active={isLoading}>
-          <Loader size="large">Loading</Loader>
-        </Dimmer>
-        {error ? (
-          <Message
-            error
-            header={`No pokemon was found for input: ${searchValue}`}
-            content="Please try again with a valid id or name"
-          />
-        ) : (
-          <>
-            <Header as="h2">{`Results`}</Header>
-            <PokemonPreview data={data} />
-          </>
-        )}
-      </Segment>
+      {(searchValue || data) && (
+        <Segment>
+          <Dimmer active={isLoading}>
+            <Loader size="large">Loading</Loader>
+          </Dimmer>
+          {error && (
+            <Message
+              error
+              header={`No pokemon was found for input: ${searchValue}`}
+              content="Please try again with a valid id or name"
+            />
+          )}
+          {data && !error && (
+            <>
+              <Header as="h2">{`Results`}</Header>
+              <PokemonPreview data={data} />
+            </>
+          )}
+        </Segment>
+      )}
     </Container>
   );
 }
