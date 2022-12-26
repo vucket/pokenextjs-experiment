@@ -14,6 +14,6 @@ export const fetchHelper = async (
     }
     throw new Error("Error on response");
   } catch (err) {
-    Promise.reject(new Error("Error while fetching data"));
+    return Promise.reject(new Error("Error while fetching data"));
   }
 };

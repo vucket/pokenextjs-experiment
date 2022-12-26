@@ -22,7 +22,7 @@ export default function PokemonSearch() {
   const searchQuery = (Array.isArray(search) ? search[0] : search) ?? "";
 
   const [searchValue, setSearchValue] = useState(searchQuery);
-
+  // TODO: Add shalow routing
   const { data, error, isLoading, mutate } = useSWRImmutable(
     searchValue ? `/api/search/${searchValue}` : null,
     fetcher,

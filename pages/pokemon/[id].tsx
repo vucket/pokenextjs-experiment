@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { PokemonBaseData } from "../../model/pokemon";
