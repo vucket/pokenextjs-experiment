@@ -2,7 +2,15 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { PokemonBaseData } from "../../model/pokemon";
-import { Container, Header, Divider, List, Grid } from "semantic-ui-react";
+import {
+  Container,
+  Header,
+  Divider,
+  List,
+  Grid,
+  Button,
+} from "semantic-ui-react";
+import { useRouter } from "next/router";
 import { POKE_API_HOST, POKE_API_PATH_POKEMON } from "../../constants";
 
 interface PokemonProps {
@@ -28,13 +36,21 @@ export const getServerSideProps: GetServerSideProps<PokemonProps> = async (
 };
 
 export default function Pokemon({ data }: PokemonProps) {
+  const router = useRouter();
   const pokemonName = data.name.toUpperCase();
   const pokemonTypes = data.types.map((el) => el.type.name);
   const pokemonMoves = data.moves.map((el) => el.move.name);
   const pokemonAbilities = data.abilities.map((el) => el.ability.name);
 
+  const onGoBack = () => {
+    router.back();
+  };
+
   return (
     <Container textAlign="justified">
+      <Button color="blue" size="medium" onClick={onGoBack}>
+        Go back to search
+      </Button>
       <Header as="h1">{pokemonName}</Header>
       <Divider />
       <Header as="h2">General Info</Header>

@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { Button, Container, Divider, Header } from "semantic-ui-react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const getPokeApiLink = () => {
   return (
@@ -44,6 +45,26 @@ export default function Home() {
         <Button color="blue" size="big" onClick={onSearchBtnClick}>
           Gotta search them all
         </Button>
+        <br />
+        <br />
+        <p>Or click on the premade links below</p>
+        <ul>
+          <li>
+            <Link href="/pokemon?search=haunter">
+              search for &quot;haunter&quot;
+            </Link>
+          </li>
+          <li>
+            <Link href="/pokemon?search=7">
+              search for pokemon number &quot;7&quot;
+            </Link>
+          </li>
+          <li>
+            <Link href="/pokemon/haunter">
+              detail page for &quot;haunter&quot;
+            </Link>
+          </li>
+        </ul>
       </Container>
     </>
   );

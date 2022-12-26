@@ -21,8 +21,8 @@ export default function PokemonSearch() {
   const { search } = router.query;
   const searchQuery = (Array.isArray(search) ? search[0] : search) ?? "";
 
-  const [searchValue, setSearchValue] = useState(searchQuery);
-  // TODO: Add shalow routing
+  const [searchValue, setSearchValue] = useState("");
+
   const { data, error, isLoading, mutate } = useSWRImmutable(
     searchValue ? `/api/search/${searchValue}` : null,
     fetcher,
@@ -46,7 +46,16 @@ export default function PokemonSearch() {
 
   // TODO: Add debounce for input
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value.trim());
+    const value = event.target.value.trim();
+    setSearchValue(value);
+    router.push(
+      {
+        pathname: "/pokemon",
+        query: { search: value },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (
