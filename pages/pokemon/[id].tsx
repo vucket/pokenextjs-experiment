@@ -12,6 +12,7 @@ import {
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { POKE_API_HOST, POKE_API_PATH_POKEMON } from "../../constants";
+import { fetchHelper } from "../../client";
 
 interface PokemonProps {
   data: PokemonBaseData;
@@ -21,13 +22,12 @@ export const getServerSideProps: GetServerSideProps<PokemonProps> = async (
   context
 ) => {
   const pokemon = context.params?.id;
-  const pokemonReq = await fetch(
+  const pokemonData: PokemonBaseData = await fetchHelper(
     `${POKE_API_HOST}${POKE_API_PATH_POKEMON}${pokemon}`
   );
-  const data: PokemonBaseData = await pokemonReq.json();
 
   const props: PokemonProps = {
-    data: data,
+    data: pokemonData,
   };
 
   return {
@@ -43,7 +43,10 @@ export default function Pokemon({ data }: PokemonProps) {
   const pokemonAbilities = data.abilities.map((el) => el.ability.name);
 
   const onGoBack = () => {
-    router.back();
+    router.push({
+      pathname: "/pokemon",
+      query: { search: data.id },
+    });
   };
 
   return (

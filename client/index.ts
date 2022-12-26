@@ -1,6 +1,6 @@
 export const fetchHelper = async (
   url: string,
-  options: Partial<RequestInit>
+  options?: Partial<RequestInit>
 ) => {
   try {
     const request = await fetch(url, {
