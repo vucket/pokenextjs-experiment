@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
@@ -14,6 +13,7 @@ import {
 import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../../helpers/pages";
 import PokemonPreview from "../../components/Preview";
+import { debounce } from "lodash";
 
 export default function PokemonSearch() {
   const router = useRouter();
@@ -21,16 +21,16 @@ export default function PokemonSearch() {
   const { search } = router.query;
   const searchQuery = (Array.isArray(search) ? search[0] : search) ?? "";
 
-  const [searchValue, setSearchValue] = useState("");
-
   const { data, error, isLoading, mutate } = useSWRImmutable(
-    searchValue ? `/api/search/${searchValue}` : null,
+    searchQuery ? `/api/search/${searchQuery}` : null,
     fetcher,
     {
       keepPreviousData: true,
       shouldRetryOnError: false,
     }
   );
+
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     if (searchQuery) {
@@ -44,7 +44,6 @@ export default function PokemonSearch() {
     }
   };
 
-  // TODO: Add debounce for input
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.trim();
     setSearchValue(value);
@@ -70,11 +69,11 @@ export default function PokemonSearch() {
         loading={false}
         action={{
           color: "blue",
-          content: "Search",
+          content: "Force search",
           onClick: onSearch,
         }}
-        onChange={onInputChange}
-        value={searchValue}
+        onChange={debounce(onInputChange, 500)}
+        defaultValue={searchValue}
       />
       <Divider />
       {(searchValue || data) && (
