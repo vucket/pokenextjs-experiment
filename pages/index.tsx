@@ -29,25 +29,23 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <Container textAlign="justified">
-          <Header as="h1">Pokemon API project with Nextjs and Nestjs</Header>
-          <Header as="h2">What is this about</Header>
-          <Divider />
-          <p>
-            This is a Nextjs web app built as an experiment to learn more about
-            the framework. The backend is built in Nestjs. The idea is to use
-            the {getPokeApiLink()} and provide basic functionality like
-            searching and going into the detail page of the desired Pokemon
-          </p>
-          <Header as="h2">How can I use this?</Header>
-          <Divider />
-          <p>Just click on the link below to star searching for Pokemons!</p>
-          <Button color="blue" onClick={onSearchBtnClick}>
-            Gotta search them all
-          </Button>
-        </Container>
-      </main>
+      <Container textAlign="justified">
+        <Header as="h1">Pokemon API project with Nextjs and Nestjs</Header>
+        <Divider />
+        <Header as="h2">What is this about</Header>
+        <p>
+          This is a Nextjs web app built as an experiment to learn more about
+          the framework. The backend is built in Nestjs. The idea is to use the{" "}
+          {getPokeApiLink()} and provide basic functionality like searching and
+          going into the detail page of the desired Pokemon
+        </p>
+        <Divider />
+        <Header as="h2">How can I use this?</Header>
+        <p>Just click on the link below to star searching for Pokemons!</p>
+        <Button color="blue" size="big" onClick={onSearchBtnClick}>
+          Gotta search them all
+        </Button>
+      </Container>
     </>
   );
 }
